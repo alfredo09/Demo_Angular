@@ -1,0 +1,22 @@
+:root {
+    --font-size: 0.95rem;
+    --font-size-header-accordion: 1rem;
+    --badge-danger: #f63d3d;
+    --badge-warning: #c7913f;
+    --badge-success: #3d9843;
+    --badge-default: #6c6c66;
+}
+
+@import "./_badges";
+@import "./_buttons";
+@import "./_dialog";
+@import "./_dropdown";
+@import "./_footer";
+@import "./_main";
+@import "./_panel-filter";
+@import "./_table";
+@import "./_calendar";
+@import "./_titles";
+@import "./_toolbar";
+@import "./_form-card";
+@import "./inputs";

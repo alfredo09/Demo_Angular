@@ -1,0 +1,158 @@
+<p-toolbar class="option-menu">
+	<ng-template pTemplate="left">
+	  <h3>{{titleProduct.secondaryTitle}}</h3>
+	</ng-template>
+	<ng-template pTemplate="right">
+	  <p-multiSelect
+		[options]="columns"
+		[(ngModel)]="columnsStatus"
+		[placeholder]="messages.selectionColumns"
+		(onChange)="filterColumns($event.value)"
+		optionLabel="header"
+		dropdownIcon="pi pi-cog"
+		display="chip"
+		[pTooltip]="messages.selectionColumns"
+		tooltipPosition="top"
+		class="mr-1"
+	  >
+		<ng-template let-option pTemplate="item">
+		  <div class="p-multiselect-representative-option w-15rem">
+			<span class="ml-1">{{ option.header }}</span>
+		  </div>
+		</ng-template>
+	  </p-multiSelect>
+	  <span class="p-input-icon-left">
+		<i class="pi pi-search"></i>
+		<input
+		  pInputText
+		  type="text"
+		  #filter
+		  [(ngModel)]="wildCard"
+		  (input)="onGlobalFilter()"
+		  [placeholder]="messages.searchCurrentView"
+		  class="w-full"
+		/>
+	  </span>
+	  <button
+		pButton
+		pRipple
+		class="p-button-outlined p-button-secondary ml-1"
+		icon="pi pi-filter-slash"
+		(click)="clear(dtProduct)"
+		[pTooltip]="buttons.clear"
+		tooltipPosition="top"
+	  ></button>
+	  <button
+		pButton
+		pRipple
+		class="p-button-outlined p-button-secondary ml-1"
+		icon="pi pi-sync"
+		(click)="reload()"
+		[pTooltip]="buttons.reload"
+		tooltipPosition="top"
+	  ></button>
+	  <!-- Botón para recuperar productos -->
+	  <button
+		pButton
+		pRipple
+		class="p-button-outlined p-button-success ml-1"
+		icon="pi pi-shopping-cart"
+		(click)="retrieveCartItems()"
+		[pTooltip]="buttons.retrieveCartItems"
+		tooltipPosition="top"
+	  >
+		Recuperar Productos
+	  </button>
+	  <!-- Botón para finalizar la compra -->
+	  <button
+		pButton
+		pRipple
+		class="p-button-outlined p-button-primary ml-1"
+		icon="pi pi-check"
+		(click)="finalizePurchase()"
+		[pTooltip]="buttons.finalizePurchase"
+		tooltipPosition="top"
+	  >
+		Finalizar Compra
+	  </button>
+	</ng-template>
+  </p-toolbar>
+  
+  <p-table
+	#dtProduct
+	[value]="products"
+	dataKey="id"
+	[resizableColumns]="true"
+	selectionMode="single"
+	[totalRecords]="totalRecords"
+	[rows]="10"
+	[showCurrentPageReport]="true"
+	[rowsPerPageOptions]="common.rowsPerPageOptions"
+	[rowHover]="true"
+	styleClass="p-datatable-sm p-datatable-gridlines"
+	[paginator]="true"
+	[globalFilterFields]="columnsToShow"
+	responsiveLayout="scroll"
+	currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+	[(first)]="firstPage"
+	(onRowSelect)="onRowSelect($event)"
+	(onRowUnselect)="onRowUnselect($event)"
+	[reorderableColumns]="true"
+	[columns]="columns"
+	[lazy]="true"
+	(onLazyLoad)="loadProducts($event)"
+  >
+	<ng-template pTemplate="header">
+	  <tr>
+		<th *ngFor="let col of columns" [hidden]="!columnsToShow.includes(col.field)">
+		  {{ col.header }}
+		</th>
+		<th>Acción</th>
+	  </tr>
+	</ng-template>
+	<ng-template pTemplate="body" let-product rowIndex="rowIndex">
+	  <tr [pSelectableRow]="product">
+		<td *ngFor="let column of columns" [hidden]="!columnsToShow.includes(column.field)">
+		  {{ product[column.field] }}
+		</td>
+		<td>
+		  <button (click)="addToCart(product)">Agregar al Carrito</button>
+		</td>
+	  </tr>
+	</ng-template>
+  </p-table>
+  
+  <h2>Carrito de Compras</h2>
+  <div *ngIf="cart.length > 0; else emptyCart">
+	<table>
+	  <thead>
+		<tr>
+		  <th>Nombre</th>
+		  <th>Precio</th>
+		  <th>Cantidad</th>
+		  <th>Total</th>
+		  <th>Acciones</th>
+		</tr>
+	  </thead>
+	  <tbody>
+		<tr *ngFor="let item of cart">
+		  <td>{{ item.product.name }}</td> 
+		  <td>{{ item.product.price | currency }}</td> 
+		  <td>
+			<button (click)="decreaseQuantity(item)">-</button>
+			{{ item.quantity }}
+			<button (click)="increaseQuantity(item)">+</button>
+		  </td>
+		  <td>{{ (item.product.price ?? 0) * item.quantity | currency }}</td> 
+		  <td><button (click)="removeItem(item)">Eliminar</button></td>
+		</tr>
+	  </tbody>
+	</table>
+	<div class="total">
+	  Total: {{ getTotal() | currency }}
+	</div>
+  </div>
+  <ng-template #emptyCart>
+	<p>El carrito está vacío.</p>
+  </ng-template>
+  

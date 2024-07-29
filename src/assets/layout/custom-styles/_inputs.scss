@@ -1,0 +1,17 @@
+$border-fields-radius: 0.6rem;
+
+.p-inputtext {
+    border-radius: $border-fields-radius;
+}
+
+.p-dropdown {
+    border-radius: $border-fields-radius;
+}
+
+.p-multiselect {
+    border-radius: $border-fields-radius;
+}
+
+.p-inputtextarea {
+    border-radius: $border-fields-radius;
+}

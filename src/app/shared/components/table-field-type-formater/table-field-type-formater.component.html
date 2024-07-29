@@ -1,0 +1,35 @@
+<ng-container [ngSwitch]="fieldColumnDefinition.columnType">
+    <span *ngSwitchCase="tableColumnTypes.BOOLEAN">
+        {{fieldValue | formatFieldBoolean}}
+    </span>
+    <span *ngSwitchCase="tableColumnTypes.ENUM">
+        {{fieldValue | formatFieldEnumPipe: fieldColumnDefinition.enumType}}
+    </span>
+    <div 
+        *ngSwitchCase="tableColumnTypes.NUMERIC"
+        class="numbers">
+        {{fieldValue}}
+    </div>
+    <div 
+        *ngSwitchCase="tableColumnTypes.AMOUNT"
+        class="numbers">
+        {{formatToAmount(fieldValue,fieldColumnDefinition.currency)}}
+    </div>
+    <span *ngSwitchCase="tableColumnTypes.DATE">
+        {{fieldValue | date: fieldColumnDefinition.format}}
+    </span>
+    <div 
+        *ngSwitchCase="tableColumnTypes.UNIT"
+        class="numbers">
+        {{formatToUnit(fieldValue,fieldColumnDefinition.unit)}}
+    </div>
+    <span *ngSwitchCase="tableColumnTypes.TEXT">
+        {{fieldValue}}
+    </span>
+    <span *ngSwitchCase="tableColumnTypes.INCLUDED">
+        {{fieldValue | formatFieldStatus}}
+    </span>
+    <span *ngSwitchDefault>
+        {{fieldValue}}
+    </span>
+</ng-container>

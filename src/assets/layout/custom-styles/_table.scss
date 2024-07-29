@@ -1,0 +1,133 @@
+.p-datatable .p-datatable-thead>tr>th {
+    text-align: left;
+    border: 1px solid var(--surface-d);
+    border-width: 0 0 1px 0;
+    font-weight: 700;
+    color: var(--primary-color-text);
+    background: var(--primary-color);
+    transition: box-shadow 0.2s;
+    transition: background-color 0.3s linear;
+}
+
+.p-datatable .p-sortable-column .p-sortable-column-icon {
+    color: var(--primary-color-text);
+    margin-left: 0.5rem;
+}
+
+.p-datatable .p-sortable-column.p-highlight:hover {
+    background: var(--primary-color);
+    color: var(--primary-color-text);
+}
+
+.p-datatable .p-sortable-column.p-highlight {
+    background: var(--primary-color);
+    color: var(--primary-color-text);
+}
+
+.p-datatable .p-sortable-column.p-highlight .p-sortable-column-icon {
+    color: var(--primary-color-text);
+}
+
+p-datatable .p-sortable-column.p-highlight {
+    background: var(--primary-color-text);
+    color: var(--primary-color);
+}
+
+.p-datatable.p-datatable-gridlines:has(.p-datatable-thead):has(.p-datatable-tbody) .p-datatable-tbody>tr>td {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 1px;
+    padding: 0.25rem 0.5rem;
+    font-size: var(--font-size);
+}
+
+.p-paginator {
+    font-size: var(--font-size);
+}
+
+.p-paginator .p-paginator-current {
+    font-size: var(--font-size);
+}
+
+.p-datatable .p-datatable-tbody>tr.p-highlight {
+    background: var(--table-selected-item-bg);
+    color: var(--table-selected-text-color);
+}
+
+.p-datatable.p-datatable-sm .p-datatable-thead>tr>th {
+    padding: 0.25rem 0.5rem;
+    font-size: var(--font-size);
+    font-weight: 640;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page {
+    border-radius: 50%;
+    font-size: var(--font-size);
+    min-width: 2rem;
+    height: 2rem;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+    border-radius: 50%;
+}
+
+.p-input-icon-left>.p-inputtext {
+    font-size: var(--font-size);
+}
+
+.p-button.p-button-secondary.p-button-outlined,
+.p-buttonset.p-button-secondary>.p-button.p-button-outlined,
+.p-splitbutton.p-button-secondary>.p-button.p-button-outlined {
+    border: 1px solid #ced4da;
+}
+
+.p-tooltip {
+    max-width: fit-content;
+}
+
+.p-column-filter {
+    vertical-align: middle;
+}
+
+.p-column-filter-menu-button {
+    color: var(--primary-color-text);
+}
+
+.p-column-filter-menu-button.p-column-filter-menu-button-open,
+.p-column-filter-menu-button.p-column-filter-menu-button-open:hover {
+    background: transparent;
+    color: #f9bc00;
+}
+
+.p-column-filter-menu-button.p-column-filter-menu-button-active,
+.p-column-filter-menu-button.p-column-filter-menu-button-active:hover {
+    background: transparent;
+    color: #f9bc00;
+}
+
+.p-multiselect.p-multiselect-chip .p-multiselect-token {
+    border-radius: 20px;
+    margin-right: 3px;
+}
+
+.break-line-multiselect-chips .p-multiselect-token {
+    margin: 0.2rem;
+}
+
+.option-menu {
+
+    .p-toolbar-group-start,
+    .p-toolbar-group-center,
+    .p-toolbar-group-end,
+    .p-toolbar-group-left,
+    .p-toolbar-group-right {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        align-items: baseline;
+    }
+
+    .p-inputwrapper-filled .p-multiselect.p-multiselect-chip .p-multiselect-label {
+        max-width: 35vh;
+    }
+}

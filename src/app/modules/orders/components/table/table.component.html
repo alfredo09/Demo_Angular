@@ -1,0 +1,223 @@
+<p-toolbar class="option-menu">
+	<ng-template pTemplate="left">
+		<h3>{{titleOrder.secondaryTitle}}</h3>
+	</ng-template>
+	<ng-template pTemplate="right">
+	  <p-multiSelect
+		[options]="columns"
+		[(ngModel)]="columnsStatus"
+		[placeholder]="messages.selectionColumns"
+		(onChange)="filterColumns($event.value)"
+		optionLabel="header"
+		dropdownIcon="pi pi-cog"
+		display="chip"
+		[pTooltip]="messages.selectionColumns"
+		tooltipPosition="top"
+		class="mr-1"
+
+	  >
+		<ng-template let-option pTemplate="item">
+		  <div class="p-multiselect-representative-option w-15rem">
+			<span class="ml-1">{{ option.header }}</span>
+		  </div>
+		</ng-template>
+	  </p-multiSelect>
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            type="text"
+            #filter
+            (input)="onGlobalFilter(dt1, $event)"
+            [placeholder]="messages.searchCurrentView"
+            class="w-full"
+          />
+        </span>
+		<button
+		  pButton
+		  pRipple
+		  class="p-button-outlined p-button-secondary ml-1"
+		  icon="pi pi-filter-slash"
+		  (click)="clear(dt1)"
+		  [pTooltip]="buttons.clear"
+		  tooltipPosition="top"
+		></button>
+		<button
+		  pButton
+		  pRipple
+		  class="p-button-outlined p-button-secondary ml-1"
+		  icon="pi pi-sync"
+		  (click)="reload()"
+		  [pTooltip]="buttons.reload"
+		  tooltipPosition="top"
+		></button>
+	</ng-template>
+  </p-toolbar>
+  <p-table
+	#dt1
+	[value]="orders"
+	dataKey="id"
+	[resizableColumns]="true"
+	selectionMode="single"
+	[rows]="10"
+	[showCurrentPageReport]="true"
+	[rowsPerPageOptions]="common.rowsPerPageOptions"
+	[rowHover]="true"
+	styleClass="p-datatable-sm p-datatable-gridlines"
+	[paginator]="true"
+	[globalFilterFields]="columnsToShow"
+	responsiveLayout="scroll"
+	currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+	[(first)]="firstPage"
+	(onRowSelect)="onRowSelect($event)"
+	(onRowUnselect)="onRowUnselect($event)"
+	[reorderableColumns]="true"
+	[columns]="columns"
+  >
+	<ng-template pTemplate="header">
+		<tr>
+			<th
+			*ngFor="let col of columns"
+			pResizableColumn
+			pReorderableColumn
+			[pSortableColumn]="col.field"
+			[hidden]="!columnsToShow.includes(col.field)"
+			class="headerExpand"
+			[style]="{ 'width': col.width + 'rem' }">
+			{{ col.header }}
+			<p-sortIcon [field]="col.field"></p-sortIcon>
+			<ng-container [ngSwitch]="col.filterType">
+				<ng-template [ngSwitchCase]="columnFilterTypes.TEXT">
+					<p-columnFilter 
+					[type]="col.filterType"
+					[field]="col.field"
+					display="menu"
+					class="ml-2"
+					matchMode="contains" 
+					[showOperator]="false" 
+					[showAddButton]="false" 
+					[showMatchModes]="false"
+					*ngIf="col.filterType">
+					</p-columnFilter>
+				</ng-template>
+	
+				<ng-template [ngSwitchCase]=" columnFilterTypes.BOOLEAN">
+					<p-columnFilter
+							[field]="col.field"
+							matchMode="equals"
+							display="menu"
+							class="ml-2"
+							[matchModeOptions]="matchModeContains"
+							[showOperator]="false" 
+							[showAddButton]="false"
+							[showMatchModes]="false" 
+						>
+						<ng-template
+							pTemplate="filter"
+							let-value
+							let-filter="filterCallback"
+						>
+							<p-dropdown
+							[options]="filterOptions"
+							optionValue="value"
+							placeholder="{{ messages.select }}"
+							[showClear]="true"
+							(onChange)="filter($event.value)"
+							></p-dropdown>
+						</ng-template>
+						</p-columnFilter>
+				</ng-template>
+				
+				<ng-template [ngSwitchCase]="columnFilterTypes.DATE">
+					<p-columnFilter 
+						[type]="col.filterType"
+						[field]="col.field"
+						display="menu"
+						class="ml-2"
+						[matchModeOptions]="matchModeDate"
+						[showOperator]="false" 
+						[showAddButton]="false" 
+						[showMatchModes]="false"
+						*ngIf="col.filterType"
+					>
+					</p-columnFilter>
+				</ng-template>
+				<ng-template [ngSwitchCase]="columnFilterTypes.AMOUNT">
+					<p-columnFilter 
+						[type]="col.filterType"
+						[field]="col.field"
+						currency="USD"
+						mode="decimal" 
+						[minFractionDigits]="2" 
+						display="menu"
+						class="ml-2"
+						[matchModeOptions]="matchModeEquals"
+						[showOperator]="false" 
+						[showAddButton]="false" 
+						[showMatchModes]="false"
+						*ngIf="col.filterType" 
+					>
+					<ng-template pTemplate="filter" let-value let-filter="filterCallback">
+						<p-inputNumber inputId="currency-us" mode="currency" currency="USD" locale="en-US" (onInput)="filter($event.value)"> </p-inputNumber>
+					</ng-template>
+					</p-columnFilter>
+				</ng-template>	
+			</ng-container>
+		  </th>
+		  </tr>
+	</ng-template>
+	<ng-template pTemplate="body" let-order rowIndex="rowIndex" let-expanded="expanded">
+	  <tr [pSelectableRow]="order">
+		<td
+			*ngFor="let column of columns; let i = index"
+			[hidden]="!columnsToShow.includes(column.field)">
+			<p-button
+				[styleClass]="'p-small-icon button-size'"
+				[rounded]="true" 
+				[pTooltip]="buttons.expand" 
+				tooltipPosition="top" 
+				[pRowToggler]="order" 
+				[icon]="
+					expanded
+					? 'icon-expand pi pi-chevron-circle-down'
+					: 'icon-expand pi pi-chevron-circle-right'
+				"
+				*ngIf="column.iconExpand && order[column.field]!=null"        
+			></p-button>
+			<app-table-field-type-formater 
+			[fieldColumnDefinition]="column" 
+			[fieldValue]="order[column.field]">
+			</app-table-field-type-formater>
+		</td>
+	  </tr>
+	</ng-template>
+	<ng-template pTemplate="rowexpansion" let-order let-rowData >
+		<tr>
+		  <td colspan="7">
+			<div class="grid">
+			  <div class="col-12 md:col-12 expand-label" >
+				  <strong>{{labels.storeData}} </strong>
+			  </div>          
+			  <table *ngFor="let col of columns; let i = index" class="table-expand">
+				<tr *ngIf="col.infoExpand">
+					<app-table-field-info-mode 
+					[fieldColumnDefinition]="col" 
+					[fieldValue]="order[col.field]">
+					</app-table-field-info-mode>
+				</tr>
+			  </table>
+			</div> 
+		  </td>
+		</tr>
+	  </ng-template>
+	<ng-template pTemplate="emptymessage">
+	  <tr>
+		<td colspan="8">{{ messages.emptyMessage }}</td>
+	  </tr>
+	</ng-template>
+	<ng-template pTemplate="loadingbody">
+	  <tr>
+		<td colspan="8">{{ messages.loadingRegisters }}</td>
+	  </tr>
+	</ng-template>
+  </p-table>

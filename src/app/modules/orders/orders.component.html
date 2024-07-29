@@ -1,0 +1,6 @@
+<section class="general-padding">
+    <h3>{{titleOrder.mainTitle}}</h3>
+    <app-toolbar></app-toolbar>
+    <app-table [orders]="orders"></app-table>
+    <app-details-orders *ngIf="order" [order]="order"></app-details-orders>
+</section>

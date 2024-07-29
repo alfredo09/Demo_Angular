@@ -1,0 +1,32 @@
+<p-toast></p-toast>
+<form [formGroup]="form" appSubmitOnEnter (enterPressed)="save()">
+    <div class="grid">
+        <div class="col-12">
+            <p-dialog [(visible)]="dialog" [styleClass]="'dialog-size'" header={{titleForm}} [modal]="true"
+                class="p-fluid">
+                <ng-template pTemplate="content">
+                    <div hidden class="form-group field">
+                        <input type="text" pInputText id="id" formControlName="id" />
+                    </div>
+                    <div class="form-group field">
+                        <label class="required-field" for="name">{{labels.name}}</label>
+                        <input type="text" pInputText id="name" required autofocus
+                            [ngClass]="{'ng-invalid ng-dirty' : submitted && form.controls['name'].invalid}"
+                            formControlName="name" />
+                        <app-form-control-error [control]="form.get('name')" [submitted]="submitted"> </app-form-control-error>
+                    </div>
+                    <div class="form-group field">
+                        <label for="description">{{labels.description}}</label>
+                        <textarea id="description" pInputTextarea rows="3" cols="20" formControlName="description"></textarea>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple [label]="buttons.cancel" icon="pi pi-times"
+                        class="p-button-secondary p-button-rounded mr-2" (click)="hideDialog()"></button>
+                    <button pButton pRipple [label]="buttons.save" icon="pi pi-check" class="p-button-rounded mr-2" (click)="save()"></button>
+                </ng-template>
+            </p-dialog>
+        </div>
+    </div>
+</form>
+

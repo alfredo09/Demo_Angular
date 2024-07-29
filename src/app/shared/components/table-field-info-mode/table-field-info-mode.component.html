@@ -1,0 +1,12 @@
+<ng-container [ngSwitch]="fieldColumnDefinition.columnType">
+    <table class="table-expand">
+        <tr>
+            <th class="column-header">
+                <b> {{ fieldColumnDefinition.header }} : </b>
+            </th>
+            <td class="column-name">
+                {{ fieldValue }}
+            </td>
+        </tr>
+    </table>
+</ng-container>

@@ -1,0 +1,36 @@
+.icons-dropdown .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+    display: inline-block;
+    width: calc(18% - 5px);
+    padding: 0.5rem 1.2rem;
+}
+
+.p-dropdown .p-dropdown-trigger {
+    background: transparent;
+    color: #6c757d;
+    width: 2rem;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+.p-dropdown .p-dropdown-trigger .p-icon {
+    width: 0.8rem;
+    height: 0.8rem;
+}
+
+.p-dropdown .p-dropdown-label {
+    font-size: var(--font-size);
+}
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+    font-size: var(--font-size);
+}
+
+.p-dropdown-item .ng-star-inserted {
+    font-size: var(--font-size);
+}
+
+.dropdown-content-wrap {
+    .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+        white-space: break-spaces;
+    }
+}

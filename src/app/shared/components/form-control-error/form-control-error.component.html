@@ -1,0 +1,31 @@
+<div *ngIf="submitted && control.invalid">
+    <small class="p-error" *ngIf="control.hasError('required')">
+        {{ messages.requiredField }}
+    </small>
+    <small class="p-error" *ngIf="control.hasError('minlength')">
+        {{ messages.minLength }} {{ control.getError('minlength')?.requiredLength }}
+    </small>
+    <small class="p-error" *ngIf="control.hasError('maxlength')">
+        {{ messages.maxLength }} {{ control.getError('maxlength')?.requiredLength }}
+    </small>
+    <small class="p-error" *ngIf="control.hasError('min')">
+        {{ messages.min }} {{ control.getError('min')?.min }}
+    </small>
+    <small class="p-error" *ngIf="control.hasError('max')">
+        {{ messages.max }} {{ control.getError('max')?.max }}
+    </small>
+    <small class="p-error" *ngIf="control.hasError('pattern')">
+        {{ patternErrorMessage ?? messages.defaultPatterErrorMessage}}
+    </small>
+</div>
+<div *ngIf="control.invalid">
+    <small class="p-error" *ngIf="control.hasError('incorrectDate')">
+        {{ messages.incorrectDate }}
+    </small>
+    <small class="p-error" *ngIf="control.hasError('startDateGreaterThanEndDate')">
+        {{ messages.startDateGreaterThanEndDate }}
+    </small>
+    <small class="p-error" *ngIf="control.hasError('endDateLessThanStartDate')">
+        {{ messages.endDateLessThanStartDate }}
+    </small>
+</div>

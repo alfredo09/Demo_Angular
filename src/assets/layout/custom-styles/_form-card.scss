@@ -1,0 +1,29 @@
+.icon-expand {
+    background: var(--blue-500);
+    font-size: 1.3rem;
+    color: white;
+    border-radius: 50%;
+    border: none;
+    width: 2rem;
+}
+
+.expand-label {
+    text-align: center;
+    background: var(--blue-500);
+    color: white;
+    border: 1rem solid var(--surface-a);
+}
+
+.table-expand {
+    width: 100%;
+}
+
+.column-header {
+    text-align: right;
+    width: 50%;
+}
+
+.column-name {
+    text-align: left;
+    width: 50%;
+}

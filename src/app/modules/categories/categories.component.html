@@ -1,0 +1,8 @@
+<section class="general-padding">
+    <h3>{{titleCategory.mainTitle}}</h3>
+    <app-toolbar></app-toolbar>
+    <app-modal-delete [serviceObject]="categoriesService" [valueMessage]=""></app-modal-delete>
+    <app-modal-info [serviceObject]="categoriesService" [columns]="columns"></app-modal-info>
+    <app-table [categories]="categories"></app-table>
+    <app-modal-forms></app-modal-forms>
+</section>

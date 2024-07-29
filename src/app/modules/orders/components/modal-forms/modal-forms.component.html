@@ -1,0 +1,74 @@
+<p-toast></p-toast>
+<form [formGroup]="form">
+    <div class="grid">
+        <div class="col-12">
+            <p-dialog [(visible)]="dialog" [styleClass]="'dialog-size'" header={{titleForm}} [modal]="true"
+                class="p-fluid">
+                <ng-template pTemplate="content">
+                  <div class="col-12">
+                      <div class="p-fluid p-formgrid grid">
+                          <div hidden class="form-group field">
+                            <input type="text" pInputText id="id" formControlName="id" />
+                          </div>
+                          <div class="form-group field col-12 md:col-6">
+                              <label for="name">{{labels.name}}</label>
+                              <input type="text" pInputText id="name" required autofocus
+                                  [ngClass]="{'ng-invalid ng-dirty' : submitted && form.controls['name'].invalid}"
+                                  formControlName="name" />
+                                  <app-form-control-error 
+                                  [control]="form.get('name')"
+                                  [submitted]="submitted">
+                                </app-form-control-error>
+                          </div>
+                          <div class="form-group field col-12 md:col-6">
+                            <label for="date">{{labels.date}}</label>
+                            <p-calendar inputId="date" [showIcon]="true" appendTo="body" formControlName="date"
+                              dataType="string"
+                              [ngClass]="{'ng-invalid ng-dirty' : submitted && form.controls['date'].invalid}"></p-calendar>
+                              <app-form-control-error [control]="form.get('date')"
+                              [submitted]="submitted">
+                            </app-form-control-error>
+                          </div>
+                          <div class="form-group field col-12 md:col-6">
+                            <label for="storeId">{{labels.store}}</label>
+                            <p-dropdown inputId="storeId" [options]="stores" formControlName="storeId"
+                              optionLabel="name" [filter]="true" filterBy="name" placeholder="{{messages.select}}" optionValue="id"
+                              [showClear]="true" appendTo="body"
+                              [ngClass]="{'ng-invalid ng-dirty' : submitted && form.controls['storeId'].invalid}">
+                              <ng-template let-store pTemplate="item">
+                                <div class="flex align-items-center gap-2">
+                                  <div>{{ store.name }}</div>
+                                </div>
+                              </ng-template>
+                            </p-dropdown>
+                            <app-form-control-error 
+                              [control]="form.get('storeId')"
+                              [submitted]="submitted">
+                            </app-form-control-error>
+                          </div>
+                          <div class="form-group field col-12 md:col-6">
+                            <label for="isDelivery">{{labels.isDelivery}}</label>
+                            <p-inputSwitch formControlName="isDelivery" inputId="isDelivery" class="field-radiobutton"></p-inputSwitch>
+                          </div>
+                          <div class="form-group field col-12 md:col-6">
+                            <label for="shippingAddress">{{labels.shippingAddress}}</label>
+                            <input type="text" pInputText id="shippingAddress" required autofocus
+                                [ngClass]="{'ng-invalid ng-dirty' : submitted && form.controls['shippingAddress'].invalid}"
+                                formControlName="shippingAddress" />
+                                <app-form-control-error 
+                                [control]="form.get('shippingAddress')"
+                                [submitted]="submitted">
+                              </app-form-control-error>
+                          </div>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                  <button pButton pRipple [label]="buttons.cancel" icon="pi pi-times"
+                      class="p-button-secondary p-button-rounded mr-2" (click)="hideDialog()"></button>
+                  <button pButton pRipple [label]="buttons.save" icon="pi pi-check" class="p-button-rounded mr-2" (click)="save()"></button>
+              </ng-template>
+            </p-dialog>
+        </div>
+    </div>
+</form>

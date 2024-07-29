@@ -1,0 +1,85 @@
+<p-toast></p-toast>
+
+<form [formGroup]="form"  appSubmitOnEnter (enterPressed)="save()">
+  <div class="grid">
+    <div class="col-12">
+      
+      <p-dialog [(visible)]="dialog" [styleClass]="'dialog-size-medium'" header={{titleForm}} [modal]="true" class="p-fluid">
+        <ng-template pTemplate="content">
+          <div class="col-12">
+            <div class="p-fluid p-formgrid grid">
+              <div hidden class="form-group field">
+                <input type="text" pInputText id="id" formControlName="id" />
+              </div>
+              <div class="form-group field col-12 md:col-6">
+                <label class="required-field" for="categoryId">{{labels.category}}</label>
+                <p-dropdown inputId="categoryId" formControlName="categoryId" [options]="categories" optionLabel="name"
+                optionValue="id" placeholder="Selecciona una categoría..." [filter]="true" filterBy="name" 
+                (onFilter)="loadCategories()"
+                  [ngClass]="{'ng-invalid ng-dirty' : submitted && form.controls['categoryId'].invalid}">
+                  <ng-template let-category pTemplate="item">
+                    <div class="flex align-items-center gap-2">
+                      <div>{{ category.name }}</div>
+                    </div>
+                  </ng-template>
+                </p-dropdown>
+                <app-form-control-error [control]="form.get('categoryId')" [submitted]="submitted"> </app-form-control-error>
+              </div>
+              <div class="form-group field col-12 md:col-6">
+                <label class="required-field" for="name">{{labels.name}}</label>
+                <input type="text" pInputText id="name" required formControlName="name"
+                  [ngClass]="{'ng-invalid ng-dirty' : submitted && form.controls['name'].invalid}" />
+                  <app-form-control-error [control]="form.get('name')" [submitted]="submitted"> </app-form-control-error>
+              </div>
+              <div class="form-group field col-12 md:col-12">
+                <label for="description">{{labels.description}}</label>
+                <textarea id="description" pInputTextarea rows="3" cols="20" formControlName="description"></textarea>
+              </div>
+              <div class="form-group field col-12 md:col-6">
+                <label class="required-field" for="price">{{labels.price}}</label>
+                <p-inputNumber 
+                  inputId="price" 
+                  mode="currency" 
+                  currency="USD" 
+                  locale="en-US"
+                  formControlName="price"
+                  [ngClass]="{'ng-invalid ng-dirty' : submitted && form.controls['price'].invalid}"
+                ></p-inputNumber>
+                <app-form-control-error [control]="form.get('price')" [submitted]="submitted"> </app-form-control-error>
+              </div>
+              <div class="form-group field col-12 md:col-6">
+                <label class="required-field" for="stock">{{labels.stock}}</label>
+                <p-inputNumber 
+                  inputId="stock" 
+                  formControlName="stock"
+                  [ngClass]="{'ng-invalid ng-dirty' : submitted && form.controls['stock'].invalid}"
+                ></p-inputNumber>
+                <app-form-control-error [control]="form.get('stock')" [submitted]="submitted"> </app-form-control-error>
+              </div>
+              <!-- <div class="form-group field col-12 md:col-6">
+                <label for="iva">{{labels.iva}}</label>
+                <p-dropdown inputId="iva" formControlName="iva" appendTo="body"
+                  [options]="iva | keyvalue" optionLabel="key" optionValue="value"
+                  [showClear]="true"></p-dropdown>
+              </div> -->
+              <div class="form-group field col-12 md:col-6">
+                <label class="required-field" for="registrationDate">{{labels.registrationDate}}</label>
+                <p-calendar inputId="registrationDate" [showIcon]="true" appendTo="body" formControlName="registrationDate"
+                  dataType="string" dateMask
+                  [ngClass]="{'ng-invalid ng-dirty' : submitted && form.controls['registrationDate'].invalid}"></p-calendar>
+                <app-form-control-error [control]="form.get('registrationDate')" [submitted]="submitted"> </app-form-control-error>              
+              </div>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <button pButton pRipple [label]="buttons.cancel" icon="pi pi-times" class="p-button-secondary p-button-rounded mr-2"
+            (click)="hideDialog()"></button>
+          <button pButton pRipple [label]="buttons.save" icon="pi pi-check" class="p-button-rounded mr-2"
+            (click)="save()"></button>
+        </ng-template>
+      </p-dialog>
+    </div>
+  </div>
+</form>
+
