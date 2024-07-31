@@ -45,6 +45,8 @@ export class TableComponent implements OnInit {
   public columnFilterTypes = ColumnFilterType;
   public common = common;
   private detailOrders !: DetailOrder;
+  public tableData: any[] = [];
+  public tableColumns: TableColumn[] = [];
 
   constructor(
     private detailsOrdersService: DetailsOrdersService
@@ -53,6 +55,8 @@ export class TableComponent implements OnInit {
   ngOnInit() {
     this.initializeColumnInformation();
     this.detailsOrdersService.triggerTable.next(this);
+    this.tableData = this.getCartDetails();
+    this.detailsOrders = this.tableData;
   }
   public onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
@@ -106,4 +110,21 @@ export class TableComponent implements OnInit {
     this.columnsStatus = event;
     this.columnsToShow = event.map(column => column.field);
   }
+
+ 
+  public getCartDetails(): any[] {
+    const cartDetailsJson = localStorage.getItem('cartDetails');
+    if (!cartDetailsJson) {
+        return [];
+    }
+    const cartDetails = JSON.parse(cartDetailsJson);
+
+    const formattedData = cartDetails.map((item: { productId: number; quantity: number; price: number; }) => ({
+      id: item.productId, 
+      quantity: item.quantity,
+      productPrice: item.price,
+      totalPrice: (item.price * item.quantity).toFixed(2),
+  }));
+    return formattedData;
+}
 }

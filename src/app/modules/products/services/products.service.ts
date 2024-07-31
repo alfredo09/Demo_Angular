@@ -9,6 +9,7 @@ import { Pageable } from 'src/app/core/model/pageable';
 import { paramsForPageable } from 'src/app/core/utils/extractValuesFilters';
 import { TableComponent } from '../components/table/table.component';
 import { DetailOrder } from 'src/app/core/model/detail-order';
+import { OrderDto } from 'src/app/core/model/order';
 
 @Injectable({
   providedIn: 'root'
@@ -62,14 +63,13 @@ export class ProductsService extends HttpService<Product> {
     ).pipe(catchError(this.handleError));
   }
 
-  public createOrder(order: any) {
-    return this.http.post<any>(this.ordersUrl, order).pipe(
-      catchError(this.handleError)
-    );
+  createOrder(orderDto: OrderDto): Observable<{ orderId: number }> {
+    return this.http.post<{ orderId: number }>(`${this.ordersUrl}`, orderDto);
   }
+
   
   public getOrderDetails(orderId: number): Observable<DetailOrder[]> {
-    return this.http.get<DetailOrder[]>(`${this.ordersUrl}/details`).pipe(
+    return this.http.get<DetailOrder[]>(`${this.ordersUrl}/${orderId}`).pipe(
       catchError(this.handleError)
     );
   }

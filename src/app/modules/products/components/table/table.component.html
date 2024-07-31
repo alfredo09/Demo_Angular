@@ -51,7 +51,6 @@
 		[pTooltip]="buttons.reload"
 		tooltipPosition="top"
 	  ></button>
-	  <!-- Botón para recuperar productos -->
 	  <button
 		pButton
 		pRipple
@@ -63,7 +62,6 @@
 	  >
 		Recuperar Productos
 	  </button>
-	  <!-- Botón para finalizar la compra -->
 	  <button
 		pButton
 		pRipple
@@ -74,6 +72,18 @@
 		tooltipPosition="top"
 	  >
 		Finalizar Compra
+	  </button>
+	  <!-- Botón para ver detalles del carrito -->
+	  <button
+		pButton
+		pRipple
+		class="p-button-outlined p-button-info ml-1"
+		icon="pi pi-info-circle"
+		(click)="showCartDetails()"
+		[pTooltip]="buttons.showCartDetails"
+		tooltipPosition="top"
+	  >
+		Detalles del Carrito
 	  </button>
 	</ng-template>
   </p-toolbar>
@@ -136,14 +146,14 @@
 	  </thead>
 	  <tbody>
 		<tr *ngFor="let item of cart">
-		  <td>{{ item.product.name }}</td> 
-		  <td>{{ item.product.price | currency }}</td> 
+		  <td>{{ item.product.name }}</td>
+		  <td>{{ item.product.price | currency }}</td>
 		  <td>
 			<button (click)="decreaseQuantity(item)">-</button>
 			{{ item.quantity }}
 			<button (click)="increaseQuantity(item)">+</button>
 		  </td>
-		  <td>{{ (item.product.price ?? 0) * item.quantity | currency }}</td> 
+		  <td>{{ (item.product.price ?? 0) * item.quantity | currency }}</td>
 		  <td><button (click)="removeItem(item)">Eliminar</button></td>
 		</tr>
 	  </tbody>

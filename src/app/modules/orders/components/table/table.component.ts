@@ -32,7 +32,7 @@ export class TableComponent {
   public firstPage = 0;
   public columns: TableColumn[] = [];
   public columnsStatus: TableColumn[] = [];
-  public columnsToShow: string[] = ['name', 'date', 'isDelivery', 'shippingAddress'];
+  public columnsToShow: string[] = ['date', 'isDelivery', 'shippingAddress'];
   public types: Record<string, string> = {};
   public matchModeContains = [{ label: "Contiene", value: FilterMatchMode.CONTAINS }];
   public matchModeEquals = [{ label: "Igual a", value: FilterMatchMode.EQUALS }];

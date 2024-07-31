@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { Product } from 'src/app/core/model/product';
-import { DetailOrder } from 'src/app/core/model/detail-order'; // Importa la entidad DetailOrder
+import { DetailOrder } from 'src/app/core/model/detail-order';
 import { ProductsService } from '../../services/products.service';
 import { HelpersService } from 'src/app/core/services/helpers.service';
 import { MessageService } from 'primeng/api';
@@ -19,8 +19,9 @@ import { TableColumnDefinitions } from 'src/app/core/utils/table-column-definiti
 import { ColumnFilterType } from 'src/app/core/enums/column-filter-type.enum';
 import { CurrenciesEnum } from 'src/app/core/enums/currencies.enum';
 import { common } from 'src/app/core/constants/common';
-import { Order } from 'src/app/core/model/order';
+import { OrderDto } from 'src/app/core/model/order'; // Asegúrate de tener la ruta correcta
 import { HttpClient } from '@angular/common/http';
+import { Order } from 'src/app/core/model/order';
 
 @Component({
   selector: 'app-table',
@@ -58,6 +59,7 @@ export class TableComponent {
   private pageable: Pageable = new Pageable();
 
   public cart: DetailOrder[] = [];
+  private storeId: number = 1; // Puedes obtener esto dinámicamente
 
   constructor(
     private productsService: ProductsService,
@@ -128,8 +130,8 @@ export class TableComponent {
       .subscribe();
   }
 
-  public clearfilter(){
-    this.wildCard='';
+  public clearfilter() {
+    this.wildCard = '';
     this.reload();
   }
 
@@ -235,14 +237,29 @@ export class TableComponent {
     localStorage.setItem('cart', JSON.stringify(this.cart));
   }
 
-  public getTotal() {
-    return this.cart.reduce((total, item) => {
+  public getTotal(): number {
+    // Calcula el total
+    const total = this.cart.reduce((total, item) => {
       const price = item.product.price ?? 0;
       const quantity = item.quantity ?? 0;
       return total + (price * quantity);
     }, 0);
+  
+    // Prepara los datos para almacenar
+    const cartDetails = this.cart.map(item => ({
+      productId: item.productId,
+      price: item.product.price,
+      quantity: item.quantity
+    }));
+  
+    // Guarda en localStorage
+    localStorage.setItem('cartDetails', JSON.stringify(cartDetails));
+    localStorage.setItem('totalPrice', total.toFixed(2)); // Guarda el total con 2 decimales
+  
+    // Retorna el total calculado
+    return total;
   }
-
+  
   public retrieveCartItems() {
     this.cart = JSON.parse(localStorage.getItem('cart') || '[]');
     console.log('Lista de productos en el carrito:', this.cart);
@@ -259,20 +276,10 @@ export class TableComponent {
     this.productsService.createOrder(order).subscribe(
       (response: { orderId: number }) => {
         const orderId = response.orderId;
-  
         if (orderId) {
-          this.productsService.getOrderDetails(orderId).subscribe(
-            details => {
-              console.log('Detalles de la orden:', details);
-              localStorage.removeItem('cart');
-              this.cart = [];
-              alert('Compra finalizada exitosamente. Detalles: ' + JSON.stringify(details));
-            },
-            error => {
-              console.error('Error al obtener los detalles de la orden:', error);
-              alert('Hubo un error al obtener los detalles de la orden. Por favor, intente nuevamente.');
-            }
-          );
+          alert('Compra finalizada exitosamente!');
+          localStorage.removeItem('cart');
+          this.cart = [];
         } else {
           console.error('El ID de la orden no está disponible.');
           alert('Hubo un error al finalizar la compra. Por favor, intente nuevamente.');
@@ -285,13 +292,45 @@ export class TableComponent {
     );
   }
   
-  private createOrderFromCart(): any {
-    return {
-      products: this.cart.map(item => ({
-        productId: item.productId,
-        quantity: item.quantity
-      })),
-      total: this.getTotal()
+  private createOrderFromCart(): OrderDto {
+    const orderDto: OrderDto = {
+      name: 'Order Name',
+      date: new Date().toISOString().split('T')[0],
+      shippingAddress: 'Shipping Address',
+      delivery: true,
+      storeId: 1,
+      orderDetails: this.cart.map(item => ({
+        productId: Number(item.productId),
+        quantity: item.quantity,
+        price: item.product.price,
+      }))
     };
+
+    return orderDto;
+  }
+
+  submitOrder() {
+    const order = this.createOrderFromCart();
+    this.productsService.createOrder(order).subscribe(
+      (response: any) => {
+        console.log('Compra finalizada exitosamente:', response); 
+      },
+      error => {
+        console.error('Error al crear la orden:', error);
+      }
+    );
+  }
+  public showCartDetails() {
+    const cartDetails = JSON.parse(localStorage.getItem('cartDetails') || '[]');
+    const totalPrice = localStorage.getItem('totalPrice') || '0.00';
+
+    // Muestra los detalles en la consola por ahora
+    console.log('Detalles del Carrito:', cartDetails);
+    console.log('Total Precio:', totalPrice);
+
+    // Para una mejor experiencia de usuario, considera mostrar en una ventana emergente o en una sección adicional del HTML
+    alert(`Detalles del Carrito:\n\n${cartDetails.map((item: { productId: any; price: any; quantity: any; }) => 
+      `Producto ID: ${item.productId}, Precio: ${item.price}, Cantidad: ${item.quantity}`
+    ).join('\n')}\n\nTotal: ${totalPrice}`);
   }
 }

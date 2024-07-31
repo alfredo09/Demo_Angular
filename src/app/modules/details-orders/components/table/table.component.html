@@ -122,18 +122,16 @@
 		  </th>
 		  </tr>
 	</ng-template>
-	<ng-template pTemplate="body" let-detailOrder rowIndex="rowIndex">
+	<ng-template pTemplate="body" let-detailOrder>
 		<tr [pSelectableRow]="detailOrder">
-			<td
-				*ngFor="let column of columns"
-				[hidden]="!columnsToShow.includes(column.field)">
-				<app-table-field-type-formater 
-				[fieldColumnDefinition]="(setCurrencyForFormat(column,detailOrder['currencyName']))" 
-				[fieldValue]="detailOrder[column.field]">
-				</app-table-field-type-formater>
-			</td>
-		  </tr>
-	</ng-template>
+		  <td *ngFor="let column of columns" [hidden]="!columnsToShow.includes(column.field)">
+			<app-table-field-type-formater 
+			  [fieldColumnDefinition]="setCurrencyForFormat(column, detailOrder['currencyName'])" 
+			  [fieldValue]="detailOrder[column.field]">
+			</app-table-field-type-formater>
+		  </td>
+		</tr>
+	  </ng-template>
 	<ng-template pTemplate="emptymessage">
 	  <tr>
 		<td colspan="8">{{ messages.emptyMessage }}</td>
